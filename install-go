@@ -8,7 +8,7 @@ export VERSION=1.11 OS=linux ARCH=amd64 && \
 
 # Set up the environment for Go
 echo 'export GOPATH=$/usr/local/go' >> ~/.bashrc && \
-	echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc 	&& \ 
+	echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc && \ 
 	source ~/.bashrc
 
 # Install dep for dependency resolution
