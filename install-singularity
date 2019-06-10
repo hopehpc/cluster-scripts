@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Install dependencies
+sudo yum update -y && \
+	sudo yum groupinstall -y 'Development Tools' && \
+	sudo yum install -y \
+	openssl-devel \
+	libuuid-devel \ 
+	libseccomp-devel \
+	wget \
+	squashfs-tools
+
+# Install go
+./install-go
+
+# Download the Singularity repository from Github
+go get -d github.com/sylabs/singularity
+
+# Check out the version of Singularity to install
+export VERSION=v3.2.1 && \
+	cd $GOPATH/src/github.com/sylabs/singularity && \
+	git fetch
+
+# REPEAT ON ALL COMPUTE NODES
