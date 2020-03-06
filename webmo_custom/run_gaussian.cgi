@@ -6,7 +6,7 @@
 
 use lib ".";
 $Singularity=1;
-$container_exec="singularity run";
+$container_exec="singularity exec";
 my ($jobNumber, $jobOwner, $queue) = @ARGV;
 
 $require++;
