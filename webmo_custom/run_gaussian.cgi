@@ -5,7 +5,8 @@
 # URL:  http://www.webmo.net/license
 
 use lib ".";
-$Singularity=1;
+$singularity=1;
+$container_path = "/home/hope-singularity/image-files/g16.sif";
 $container_exec="singularity exec";
 my ($jobNumber, $jobOwner, $queue) = @ARGV;
 
@@ -97,6 +98,7 @@ else
 	if ($nnode > 1 && $gaussianVersion eq 'g03')
 	{
 		$ENV{'GAUSS_LFLAGS'}="-nodelist \"@unique_nodes\"";
+		# I'm not sure how to make containers work with Linda, I'm not going to attempt this.
 		$exec_command = "$gaussianBase/${gaussianVersion}l";
 	}
 	elsif ($nnode > 1)
@@ -106,13 +108,16 @@ else
 		system("$mvPath $input_file $input_file.000; echo $lindaWorkers | cat - $input_file.000 > $input_file; $rmPath $input_file.000");
 		$exec_command = "$gaussianBase/$gaussianVersion";
 	}
-	elsif($Singularity){
-		$container_path = "/home/hope-singularity/image-files/g16.sif";
-		$exec_command = "$container_exec $container_path $gaussianBase/$gaussianVersion";
-	}
 	else
 	{
-		$exec_command = "$gaussianBase/$gaussianVersion";
+		if($singularity)
+		{
+			$exec_command = "$container_exec $container_path $gaussianBase/$gaussianVersion";
+		}
+		else 
+		{
+			$exec_command = "$gaussianBase/$gaussianVersion";
+		}
 	}
 	print "Executing command: $exec_command\n";
 	
