@@ -82,15 +82,22 @@ else
 		symlink("$input_directory/NBODATA.92", "$jobScratch/output.chk/NBODATA.92");
 		symlink("$input_directory/NBODATA.94", "$jobScratch/output.chk/NBODATA.94");
 		symlink("$input_directory/NBODATA.96", "$jobScratch/output.chk/NBODATA.96");
-		
+	
+		if($singularity){
+			$exec_command = "$container_exec $container_path bash -c '. $qchemBase/bin/qchem.setup.sh; $qchemBase/bin/qchem $np input.inp output.out output.chk'";
+		}
+		else {	
 		$exec_command = ". $qchemBase/bin/qchem.setup.sh; $qchemBase/bin/qchem $np input.inp output.out output.chk";
+		}
 	}
 	else {
+		if($singularity){
+			$exec_command = "$container_exec $container_path bash -c '. $qchemBase/bin/qchem.setup.sh; $qchemBase/bin/qchem $np input.inp output.out'";
+		}
+		else {	
 		$exec_command = ". $qchemBase/bin/qchem.setup.sh; $qchemBase/bin/qchem $np input.inp output.out";
+		}
 	}
-        if($singularity) {
-                $exec_command = "$container_exec $container_path bash -c \"$exec_command\" ";
-        }
 	print "Executing command: $exec_command\n";
 
 	open(STDIN, "<$input_file");

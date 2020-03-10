@@ -98,24 +98,27 @@ else
 	if ($nnode > 1 && $gaussianVersion eq 'g03')
 	{
 		$ENV{'GAUSS_LFLAGS'}="-nodelist \"@unique_nodes\"";
-		# For containers, something may be needed for Linda.
+		# I'm not sure how to make containers work with Linda, I'm not going to attempt this.
 		$exec_command = "$gaussianBase/${gaussianVersion}l";
 	}
 	elsif ($nnode > 1)
 	{
 		#for g09/g16, add the %LindaWorkers to the input file
 		my $lindaWorkers="%LindaWorkers=".join(',', @unique_nodes);
-		# For containers, something may be needed for Linda.
 		system("$mvPath $input_file $input_file.000; echo $lindaWorkers | cat - $input_file.000 > $input_file; $rmPath $input_file.000");
 		$exec_command = "$gaussianBase/$gaussianVersion";
 	}
 	else
 	{
-		$exec_command = "$gaussianBase/$gaussianVersion";
+		if($singularity)
+		{
+			$exec_command = "$container_exec $container_path $gaussianBase/$gaussianVersion";
+		}
+		else 
+		{
+			$exec_command = "$gaussianBase/$gaussianVersion";
+		}
 	}
-        if($singularity) {
-                $exec_command = "$container_exec $container_path bash -c \"$exec_command\" ";
-        }
 	print "Executing command: $exec_command\n";
 	
 	open(STDIN, "<$input_file");

@@ -8,6 +8,7 @@ use lib ".";
 
 $singularity=1;
 $container_exec="singularity exec";
+#$mopac_path = "/usr/local/mopac2016/MOPAC2016.exe";
 $container_path = "/home/hope-singularity/image-files/mopac2016_centos7.sif";
 
 my ($jobNumber, $jobOwner, $queue) = @ARGV;
@@ -89,14 +90,22 @@ else
 	if ($mopacVersion >= 2002) {
 		chdir($input_directory);
 		#workaround for expired MOPAC versions by piping a carraige return into STDIN -- at least the job will run, but the warning message is preserved
-		$exec_command = "echo '' | $mopacPath input";
-	} else {
+		if($singularity) {
+			$exec_command = "$container_exec $container_path bash -c 'echo "" | $mopacPath input '";
+		}
+		else {
+			$exec_command = "echo '' | $mopacPath input";
+		}
+	} 
+        else {
 		# Open stdin to the input file, for other versions of mopac
 		open(STDIN, "<$input_file");
-		$exec_command = "$mopacPath $input_stub";
-	}
-	if($singularity) {
-		$exec_command = "$container_exec $container_path bash -c \"$exec_command\" ";
+		if($singularity) {
+			$exec_command = "$container_exec $container_path $mopacPath $input_stub";
+		}
+		else {
+			$exec_command = "$mopacPath $input_stub";
+		}
 	}
 	print "Executing command: $exec_command\n";
 
