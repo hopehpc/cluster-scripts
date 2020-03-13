@@ -69,9 +69,12 @@ else
 	
 	my $exec_command;
 	if ($orcaMPIsetupScript) {
-		$exec_command = ". $orcaMPIsetupScript; $orcaBase/orca input.inp";
+		$exec_command = ". $orcaBase/orca_setup.sh; . $orcaMPIsetupScript; $orcaBase/orca input.inp";
 	} else {
-		$exec_command = "$orcaBase/orca input.inp";
+		$exec_command = ". $orcaBase/orca_setup.sh; $orcaBase/orca input.inp";
+	}
+	if($nproc > 1) {
+		$exec_command = "export OMP_NUM_THREADS=$nproc; $exec_command"
 	}
         if($singularity) {
                 $exec_command = "$container_exec $container_path bash -c \"$exec_command\" ";
