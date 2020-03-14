@@ -62,7 +62,7 @@ else
 	# change directory to the job directory for some output files
 	chdir($input_directory);
 	
-	my $np = $nproc > 1 ? "-np $nproc" : "";
+	my $np = $nproc > 1 ? "-nt $nproc" : "";
 	# add the PBS flag for later versions of Q-Chem; if your version
 	# of Q-Chem does not understand the -pbs flag, you may need to
 	# commment the following line, and modify the parallel.csh script
@@ -83,10 +83,10 @@ else
 		symlink("$input_directory/NBODATA.94", "$jobScratch/output.chk/NBODATA.94");
 		symlink("$input_directory/NBODATA.96", "$jobScratch/output.chk/NBODATA.96");
 		
-		$exec_command = ". $qchemBase/bin/qchem.setup.sh; $qchemBase/bin/qchem $np input.inp output.out output.chk";
+		$exec_command = ". $qchemBase/qcenv.sh; $qchemBase/bin/qchem $np input.inp output.out output.chk";
 	}
 	else {
-		$exec_command = ". $qchemBase/bin/qchem.setup.sh; $qchemBase/bin/qchem $np input.inp output.out";
+		$exec_command = ". $qchemBase/qcenv.sh; $qchemBase/bin/qchem $np input.inp output.out"; 
 	}
         if($singularity) {
                 $exec_command = "$container_exec $container_path bash -c \"$exec_command\" ";
