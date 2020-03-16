@@ -1,0 +1,248 @@
+Molecular Energy
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Geometry Optimization
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+! OPT
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Vibrational Frequencies
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+! FREQ
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Optimize + Vib Freq
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+! OPT
+! FREQ
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Excited States and UV-VIS
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! [%IF exMethod == "TDDFT"%]$method[%ELSE%]HF[%END%] $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+
+[%IF exMethod == "TDDFT"-%]
+%tddft
+  nroots 8
+  maxdim 64
+end
+[%ELSE-%]
+%cis
+[%IF exMethod == "CIS(D)"%]  dcorr 1\n[%END-%]
+  nroots 8
+  maxdim 64
+end
+[%END-%]
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+NMR
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+! NMR TightSCF Grid4
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+
+%eprnmr
+  Nuclei = all C { shift }
+  Nuclei = all H { shift }
+end
+========================================
+Coordinate Scan
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+! OPT
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Molecular Orbitals
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Natural Bond Orbitals
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+%nbo
+nbokeylist="\$NBO
+FILE=NBODATA
+AOPNAO=W32 AOPNHO=W34 AOPNBO=W36
+DMNAO=W82 DMNHO=W84 DMNBO=W86
+FNAO=W92 FNHO=W94 FNBO=W96
+\$END"
+end
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Transition State Optimization
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+! OptTS
+
+%geom
+  Calc_Hess true # calculation of the exact Hessian before the first optimization step
+end
+
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
+Other
+#
+# $jobName
+#
+
+[%IF nproc > 1 -%]
+%pal
+ nproc $nproc
+end\n
+[%END-%]
+! $method $basisSet [%IF auxBasisSet %]$auxBasisSet[%END%] [%IF useSymmetry %]UseSym[%END%] $solvent
+
+[%IF multiplicity > 1 && !unrestricted %]%scf HFTyp ROHF end\n[%END-%]
+[%IF constraints %]$constraints\n[%END-%]
+
+* [%IF cartesianCoordinates %]xyz[%ELSE%]internal[%END-%] $charge $multiplicity
+$geometry
+*
+========================================
